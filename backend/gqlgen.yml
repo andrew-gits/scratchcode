@@ -42,7 +42,7 @@ resolver:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
- - "github.com/andrew-gits/scratchcode/api/graph/model"
+#  - "github.com/andrew-gits/scratchcode/backend/graph/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #

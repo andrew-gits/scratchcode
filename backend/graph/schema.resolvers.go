@@ -7,8 +7,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/andrew-gits/scratchcode/api/graph/generated"
-	"github.com/andrew-gits/scratchcode/api/graph/model"
+	"github.com/andrew-gits/scratchcode/backend/graph/generated"
+	"github.com/andrew-gits/scratchcode/backend/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.
