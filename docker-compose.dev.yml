@@ -1,26 +1,36 @@
 version: "3.7"
 
 services:
+# convert this to handle both frontend angular and api
   app:
     build:
-      context: app
-      target: builder
+      context: ./app
+      target: dev
+      args:
+        USERNAME: "user"
+        GROUPNAME: "user"
+        USER_ID: "${USER_ID}"
+        GROUP_ID: "${GROUP_ID}"
     ports:
-      - 3000:3000
-    volumes:
-      - ./app:/app
-      - /app/node_modules
-
-  backend:
-    build:
-      context: api
-      target: builder
+      - 3000:3000 # port golang API uses
+      - 4200:4200 # port angular uses
     secrets:
       - db-password
+      - vercel-token
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./:/node
+      # angular dirs
+      - ./app:/node/app
+      - /node/app/node_modules
+      # api dirs
+      - ./.vercel:/node/.vercel
+      - ./api:/node/api
+      - ./backend:/node/backend
 
+# test db connection
   db:
     image: mysql:8
     command: '--default-authentication-plugin=mysql_native_password'
@@ -46,3 +56,5 @@ volumes:
 secrets:
   db-password:
     file: db/password.txt
+  vercel-token:
+    file: vercel.txt

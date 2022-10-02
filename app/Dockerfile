@@ -1,19 +1,40 @@
 # syntax=docker/dockerfile:1.4
 
-FROM --platform=$BUILDPLATFORM node:16 as builder
+FROM --platform=$BUILDPLATFORM node:16 as dev
 
-RUN mkdir /app
-WORKDIR /app
+ARG USER_ID
+ARG GROUP_ID
+ARG USERNAME
+ARG GROUPNAME
 
+COPY create-group-user.bash ./
+RUN ./create-group-user.bash
+
+RUN mkdir /node
+WORKDIR /node
 RUN npm install -g @angular/cli@14
+RUN npm install -g vercel
 
-COPY package.json package-lock.json ./
-RUN npm ci
+# Create and define the node_modules's cache directory.
+RUN mkdir /cache
+WORKDIR /cache
+COPY package.json ./
+COPY package-lock.json ./
 
-COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# Install the application's dependencies into the node_modules's cache directory.
+RUN chown -R ${USER_ID} /node /cache
+USER ${USER_ID}
+RUN npm install
 
-FROM builder as dev-envs
+# Create and define the application's working directory.
+RUN mkdir /node/app
+WORKDIR /node/app
+
+USER root
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+CMD ["/node/app/start-dev-servers.bash"]
+
+FROM dev as dev-envs
 
 RUN <<EOF
 apt-get update
@@ -26,7 +47,14 @@ groupadd docker
 usermod -aG docker vscode
 EOF
 
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
+CMD ./start-dev-servers.bash
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+# example https://medium.com/bb-tutorials-and-thoughts/angular-local-development-with-docker-compose-13719b998e43
+
+# # install Docker tools (cli, buildx, compose)
+# COPY --from=gloursdocker/docker / /
+
+# # https://docs.docker.com/config/containers/multi-service_container/
+# # https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
+# # https://docs.docker.com/language/nodejs/develop/
+# CMD ["ng", "serve", "--host", "0.0.0.0"]
