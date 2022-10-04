@@ -10,10 +10,19 @@ ARG GROUPNAME
 COPY create-group-user.bash ./
 RUN ./create-group-user.bash
 
+ARG GO_ARCHIVE=go1.19.1.linux-amd64.tar.gz
+ARG ARCHIVE_SHA256=acc512fbab4f716a8f97a8b3fbaa9ddd39606a28be6c2515ef7c6c6311acffde
+
 RUN mkdir /node
 WORKDIR /node
 RUN npm install -g @angular/cli@14
 RUN npm install -g vercel
+RUN curl -OL https://go.dev/dl/${GO_ARCHIVE}
+RUN tar -C /usr/local -xzf ${GO_ARCHIVE}
+RUN [ $(sha256sum ${GO_ARCHIVE} | cut -d' ' -f1) = "${ARCHIVE_SHA256}" ]
+RUN rm ${GO_ARCHIVE}
+
+ENV PATH=$PATH:/usr/local/go/bin
 
 # Create and define the node_modules's cache directory.
 RUN mkdir /cache
