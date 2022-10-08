@@ -1,16 +1,20 @@
 #!/bin/bash
 
-# Update node_modules
-cp -r /cache/node_modules/. /node/app/node_modules/
+# If a Vercel Project is not linked this will start the cli so you can link to a project
+if [ ! -f /node/.vercel/project.json ]; then
+    echo "Please link to a project on Vercel for local development to work"
+    ./vercel-setup.bash
+    exit 0
+fi
+
+# install new packages if needed
+npm install
 
 # Start the first process
-(cd .. && vercel dev --token $(cat /run/secrets/vercel-token))
+vercel dev --token $(cat /run/secrets/vercel-token) --yes
 
-# Start the second process
-ng serve --host 0.0.0.0 &
+# Wait for any process to exit
+wait -n
 
-# # Wait for any process to exit
-# wait -n # this will probably cause problems
-
-# # Exit with status of process that exited first
-# exit $?
+# Exit with status of process that exited first
+exit $?
