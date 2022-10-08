@@ -1,6 +1,6 @@
 module github.com/andrew-gits/scratchcode/app
 
-go 1.19
+go 1.18
 
 require (
 	github.com/99designs/gqlgen v0.17.20
