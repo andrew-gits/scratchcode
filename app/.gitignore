@@ -43,3 +43,6 @@ Thumbs.db
 
 # Vercel files
 .vercel
+
+# Enviroment Variables
+.env

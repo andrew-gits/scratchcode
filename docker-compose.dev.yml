@@ -26,6 +26,8 @@ services:
       # api dirs
       - ./.vercel:/node/.vercel
       - ./backend:/node/backend
+      - ./go.work:/node/go.work
+      - ./run_tests.bash:/node/run_tests.bash
 
 # test db connection
   db:
