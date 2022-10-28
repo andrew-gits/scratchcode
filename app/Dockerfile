@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 
-FROM --platform=$BUILDPLATFORM node:16 as dev
+FROM node:16 as dev
 
 ARG USER_ID
 ARG GROUP_ID
