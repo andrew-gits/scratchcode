@@ -6,8 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Create some files to store credentials needed to run the containers
+        run: echo ${{ secrets.DB_PASSWORD }} > db/password.txt
+      - run: echo ${{ secrets.VERCEL_TOKEN }} > vercel.txt
       - name: Build the stack
-        run: docker-compose -f "docker-compose.yml" up -d --build
+        run: ./dev-up.bash
       - name: Test
         run: ls -lah
       - run: whoami
+      - run: docker exec -it cd /node/backend && ./run_tests.bash
