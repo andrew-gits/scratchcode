@@ -17,4 +17,4 @@ jobs:
       - name: Test
         run: ls -lah
       - run: whoami
-      - run: docker exec -it scratch-app cd /node/backend && ./run_tests.bash
+      - run: docker exec -it scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
