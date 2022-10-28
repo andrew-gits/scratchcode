@@ -7,6 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create some files to store credentials needed to run the containers
+        run: mkdir db
         run: echo ${{ secrets.DB_PASSWORD }} > db/password.txt
       - run: echo ${{ secrets.VERCEL_TOKEN }} > vercel.txt
       - name: Build the stack
