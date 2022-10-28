@@ -1,0 +1,13 @@
+name: API tests
+run-name: Running API tests
+on: [push]
+jobs:
+  Test-API:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the stack
+        run: docker-compose -f "docker-compose.yml" up -d --build
+      - name: Test
+        run: ls -lah
+      - run: whoami

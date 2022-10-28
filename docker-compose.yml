@@ -3,6 +3,7 @@ version: "3.7"
 services:
 # convert this to handle both frontend angular and api
   app:
+    container_name: scratch-app
     build:
       context: ./app
       target: dev
@@ -32,6 +33,7 @@ services:
 # test db connection
   db:
     image: mysql:8
+    container_name: scratch-db
     command: '--default-authentication-plugin=mysql_native_password'
     restart: always
     healthcheck:

@@ -1,6 +1,6 @@
 # Scratch Code Server
 
-Pastebin for executable code.
+Web based editor for ___.
 
 ## Installation
 
