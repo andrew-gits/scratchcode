@@ -24,12 +24,12 @@ build-job:
     - apk add --no-cache --upgrade bash
     - chmod +x ./dev-up.bash
     - /bin/bash ./dev-up.bash
+    - docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
 
 test-api:
   stage: test
   script:
     - echo "This job tests something"
-    - docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
 
 test-app:
   stage: test
