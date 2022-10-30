@@ -31,7 +31,7 @@ test-api:
   stage: test
   script:
     - echo "This job tests something"
-    - cd ../backend
+    - cd ./backend
     - /bin/bash ../run_tests.bash
 
 test-app:
