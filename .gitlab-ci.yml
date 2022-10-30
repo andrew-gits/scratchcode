@@ -16,7 +16,9 @@ build-job:
     - mkdir app/.vercel
     - echo $VERCEL_LINK > app/.vercel/project.json
     - apk add --no-cache docker-compose
-    -  ./dev-up.bash
+    - pwd
+    - ls
+    - ./dev-up.bash
 
 test-api:
   stage: test
