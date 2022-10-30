@@ -31,7 +31,6 @@ test-api:
   stage: test
   script:
     - echo "This job tests something"
-    - apk add --no-cache --upgrade bash
     - cd ../backend
     - /bin/bash ../run_tests.bash
 

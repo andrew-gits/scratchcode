@@ -20,6 +20,8 @@ jobs:
       - run: echo ${{ secrets.VERCEL_TOKEN }} > vercel.txt
       - run: mkdir app/.vercel
       - run: echo ${{ secrets.VERCEL_LINK }} > app/.vercel/project.json
+      - run: cd ./backend
+      - run: /bin/bash ../run_tests.bash
       # - name: Build the stack
       #   run: ./dev-up.bash
       # - name: Test
