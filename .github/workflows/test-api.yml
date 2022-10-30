@@ -4,17 +4,26 @@ on: [push]
 jobs:
   Test-API:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
     steps:
       - uses: actions/checkout@v3
+        with:
+          go-version: '1.18.0'
+          node-version: ${{ matrix.node-version }}
       - name: Create some files to store credentials needed to run the containers
         run: mkdir db
       - run: echo ${{ secrets.DB_PASSWORD }} > db/password.txt
       - run: echo ${{ secrets.VERCEL_TOKEN }} > vercel.txt
       - run: mkdir app/.vercel
       - run: echo ${{ secrets.VERCEL_LINK }} > app/.vercel/project.json
-      - name: Build the stack
-        run: ./dev-up.bash
-      - name: Test
-        run: ls -lah
-      - run: whoami
-      - run: docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
+      # - name: Build the stack
+      #   run: ./dev-up.bash
+      # - name: Test
+      #   run: ls -lah
+      # - run: whoami
+      # - run: docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
+
