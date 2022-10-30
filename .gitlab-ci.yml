@@ -1,12 +1,28 @@
+image: docker
+services:
+  - docker:dind
+
+variables:
+  DB_PASSWORD: $DB_PASSWORD
+  VERCEL_TOKEN: $VERCEL_TOKEN
+  VERCEL_LINK: $VERCEL_LINK
+
 build-job:
   stage: build
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - mkdir db
+    - echo $DB_PASSWORD > db/password.txt
+    - echo $VERCEL_TOKEN > vercel.txt
+    - mkdir app/.vercel
+    - echo $VERCEL_LINK > app/.vercel/project.json
+    - apk add --no-cache docker-compose
+    -  ./dev-up.bash
 
 test-api:
   stage: test
   script:
     - echo "This job tests something"
+    - docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
 
 test-app:
   stage: test
