@@ -32,9 +32,9 @@ install-dependencies:
   cache:
     key:
       files:
-        - package-lock.json
+        - app/package-lock.json
     paths:
-      - node_modules
+      - app/node_modules
     policy: pull
   only:
     refs:
@@ -64,9 +64,9 @@ test-app:
   cache:
     key:
       files:
-        - package-lock.json
+        - app/package-lock.json
     paths:
-      - node_modules
+      - app/node_modules
     policy: pull
 
 test-e2e:
