@@ -35,13 +35,13 @@ install-dependencies:
         - app/package-lock.json
     paths:
       - app/node_modules
-    policy: pull
+    policy: pull-push
   only:
     refs:
       - merge_requests
       - main
-    # changes:
-    #   - package-lock.json
+    changes:
+      - package-lock.json
 
 test-api:
   image: golang
