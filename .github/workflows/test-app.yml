@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main", "dev/*"]
 jobs:
-  Run Tests:
+  Run-Tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,5 +22,6 @@ jobs:
         # run: |
         #   ls ${{ github.workspace }}
       - run: npm ci
+      - run: npm install @angular/cli@14
       - run: npm run test:prod
       - run: npm run lint
