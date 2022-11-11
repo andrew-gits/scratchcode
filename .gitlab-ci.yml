@@ -27,6 +27,7 @@ install-dependencies:
     # - docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
     - cd app
     - npm ci
+    - npm install @angular/cli@14
 
   cache:
     key:
