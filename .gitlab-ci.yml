@@ -40,8 +40,8 @@ install-dependencies:
     refs:
       - merge_requests
       - main
-    changes:
-      - package-lock.json
+    # changes:
+    #   - package-lock.json
 
 test-api:
   image: golang
