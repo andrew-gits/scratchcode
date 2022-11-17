@@ -55,9 +55,9 @@ test-app:
     policy: pull
   script:
     - cd app
-    - "Lint Angular app"
+    - echo "Lint Angular app"
     - npm run lint
-    - "Run Angular app test cases"
+    - echo "Run Angular app test cases"
     - npm run test:prod
 
 test-e2e:
