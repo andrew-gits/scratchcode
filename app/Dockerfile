@@ -38,18 +38,3 @@ RUN npm install
 USER root
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
 CMD ["./start-dev-servers.bash"]
-
-# FROM dev as dev-envs
-
-# RUN <<EOF
-# apt-get update
-# apt-get install -y --no-install-recommends git
-# EOF
-
-# RUN <<EOF
-# useradd -s /bin/bash -m vscode
-# groupadd docker
-# usermod -aG docker vscode
-# EOF
-
-# CMD ./start-dev-servers.bash

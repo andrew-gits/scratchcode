@@ -1,6 +1,4 @@
 image: node:16-alpine
-# services:
-#   - docker:dind
 
 variables:
   DB_PASSWORD: $DB_PASSWORD
@@ -14,21 +12,6 @@ stages:
 
 install-dependencies:
   stage: build
-  script:
-    # - mkdir db
-    # - echo $DB_PASSWORD > db/password.txt
-    # - echo $VERCEL_TOKEN > vercel.txt
-    # - mkdir app/.vercel
-    # - echo $VERCEL_LINK > app/.vercel/project.json
-    # - apk add --no-cache docker-compose
-    # - apk add --no-cache --upgrade bash
-    # - chmod +x ./dev-up.bash
-    # - /bin/bash ./dev-up.bash
-    # - docker exec scratch-app /bin/bash -c "cd ../backend && ../run_tests.bash"
-    - cd app
-    - npm ci
-    - npm install @angular/cli@14
-
   cache:
     key:
       files:
@@ -40,15 +23,21 @@ install-dependencies:
     refs:
       - merge_requests
       - main
-    # changes:
-    #   - package-lock.json
+    changes:
+      - package-lock.json
+  script:
+    - cd app
+    - echo "Installing Node Dependencies"
+    - npm ci
+    - echo "Installing Angular CLI"
+    - npm install @angular/cli@14
 
 test-api:
   image: golang
   stage: test
   script:
-    - echo "This job tests something"
     - cd ./backend
+    - echo "Running Go Tests"
     - /bin/bash ../run_tests.bash
 
 test-app:
@@ -57,10 +46,6 @@ test-app:
   before_script:
     - apk add chromium
     - export CHROME_BIN=/usr/bin/chromium-browser
-  script:
-    - cd app
-    - npm run lint
-    - npm run test:prod
   cache:
     key:
       files:
@@ -68,6 +53,12 @@ test-app:
     paths:
       - app/node_modules
     policy: pull
+  script:
+    - cd app
+    - "Lint Angular app"
+    - npm run lint
+    - "Run Angular app test cases"
+    - npm run test:prod
 
 test-e2e:
   stage: test

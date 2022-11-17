@@ -6,6 +6,9 @@ on:
 jobs:
   Run-Tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: app
@@ -19,9 +22,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-        # run: |
-        #   ls ${{ github.workspace }}
-      - run: npm ci
-      - run: npm install @angular/cli@14
-      - run: npm run test:prod
-      - run: npm run lint
+      - name: Install dependencies and Angular CLI
+        run: |
+        npm ci
+        npm install @angular/cli@14
+      - name: "Run linter"
+        run: npm run lint
+      - name: "Run Angular tests"
+        run: npm run test:prod
