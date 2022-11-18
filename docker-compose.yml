@@ -10,10 +10,10 @@ services:
       args:
         USERNAME: "user"
         GROUPNAME: "user"
-        USER_ID: "${USER_ID}"
-        GROUP_ID: "${GROUP_ID}"
-    ports:
-      - 3000:3000 # port golang API uses
+        USER_ID: "$USER_ID"
+        GROUP_ID: "$GROUP_ID"
+    environment:
+      - DISPLAY=${DISPLAY}
     secrets:
       - db-password
       - vercel-token
@@ -29,6 +29,9 @@ services:
       - ./backend:/node/backend
       - ./go.work:/node/go.work
       - ./run_tests.bash:/node/run_tests.bash
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    ports:
+      - 3000:3000
 
 # test db connection
   db:

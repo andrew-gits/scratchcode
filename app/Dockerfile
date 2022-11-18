@@ -1,29 +1,29 @@
 # syntax=docker/dockerfile:1.4
 
-FROM node:16 as dev
+FROM node:16-alpine as dev
 
 ARG USER_ID
 ARG GROUP_ID
 ARG USERNAME
 ARG GROUPNAME
-ARG GO_ARCHIVE=go1.19.1.linux-amd64.tar.gz
-ARG ARCHIVE_SHA256=acc512fbab4f716a8f97a8b3fbaa9ddd39606a28be6c2515ef7c6c6311acffde
-
-# Create a user and group with the same IDs as the host so files can be shared
-COPY create-group-user.bash ./
-RUN ./create-group-user.bash
 
 # Intstall Golang, Vercel Cli, and Angular Cli
+RUN apk add --no-cache bash
+RUN apk add chromium
+ENV CHROME_BIN=/usr/bin/chromium-browser
+
 RUN mkdir /node
 WORKDIR /node
 RUN npm install -g @angular/cli@14
 RUN npm install -g vercel
-RUN curl -OL https://go.dev/dl/${GO_ARCHIVE}
-RUN tar -C /usr/local -xzf ${GO_ARCHIVE}
-RUN [ $(sha256sum ${GO_ARCHIVE} | cut -d' ' -f1) = "${ARCHIVE_SHA256}" ]
-RUN rm ${GO_ARCHIVE}
 
-ENV PATH=$PATH:/usr/local/go/bin
+COPY --from=golang:1.18-alpine /usr/local/go/ /usr/local/go/
+ENV GOPATH /usr/local/go
+ENV PATH $GOPATH/bin:$PATH
+
+# Create a user and group with the same IDs as the host so files can be shared
+COPY create-group-user.bash ./
+RUN /bin/bash ./create-group-user.bash
 
 # Create and define the application's working directory.
 WORKDIR /node/app
