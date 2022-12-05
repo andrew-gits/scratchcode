@@ -7,6 +7,11 @@ ARG GROUP_ID
 ARG USERNAME
 ARG GROUPNAME
 
+# Create user with same gid and uid as person building the image to prevent
+# permission issues
+RUN getent group $GROUP_ID || addgroup --gid $GROUP_ID user
+RUN getent passwd $USER_ID || adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+
 # Intstall Golang, Vercel Cli, and Angular Cli
 RUN apk add --no-cache bash
 RUN apk add chromium
@@ -21,9 +26,8 @@ COPY --from=golang:1.18-alpine /usr/local/go/ /usr/local/go/
 ENV GOPATH /usr/local/go
 ENV PATH $GOPATH/bin:$PATH
 
-# Create a user and group with the same IDs as the host so files can be shared
-COPY create-group-user.bash ./
-RUN /bin/bash ./create-group-user.bash
+ENV USER_ID $USER_ID
+ENV GROUP_ID $GROUP_ID
 
 # Create and define the application's working directory.
 WORKDIR /node/app
@@ -32,8 +36,9 @@ WORKDIR /node/app
 COPY package.json ./
 COPY package-lock.json ./
 RUN chown -R ${USER_ID} /node
-USER ${USER_ID}
 RUN npm install
+
+RUN chown -R $USER_ID:$GROUP_ID /node
 
 USER root
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]

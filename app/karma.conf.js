@@ -37,10 +37,14 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         // browsers: ['Chrome', 'Firefox'],
-        browsers: ['ChromeHeadlessCI'],
+        browsers: ['ChromeHeadlessCI', 'ChromeRoot'],
         customLaunchers: {
             ChromeHeadlessCI: {
                 base: 'ChromeHeadless',
+                flags: ['--no-sandbox'],
+            },
+            ChromeRoot: {
+                base: 'Chrome',
                 flags: ['--no-sandbox'],
             },
         },

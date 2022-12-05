@@ -13,7 +13,7 @@ services:
         USER_ID: "$USER_ID"
         GROUP_ID: "$GROUP_ID"
     environment:
-      - DISPLAY=${DISPLAY}
+      - DISPLAY=$DISPLAY
     secrets:
       - db-password
       - vercel-token
@@ -32,6 +32,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
     ports:
       - 3000:3000
+    network_mode: "host"
 
 # test db connection
   db:
